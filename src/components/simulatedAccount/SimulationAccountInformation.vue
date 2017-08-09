@@ -1,10 +1,10 @@
 <!--
-内容：模拟账户页面
+内容：模拟账户概要页面
 作者：BOBO
-日期： 20170803
+日期： 20170809
 -->
 <template>
-  <div class="account-information">
+  <div class="simulation-account-information">
     <!-- 账户参数 -->
     <account-parameters></account-parameters>
 
@@ -22,10 +22,10 @@ export default {
 		AccountPositionLang,
 		AccountParameters
 	},
-  	name: 'account-information',
+  	name: 'simulation-account-information',
   	data () {
 	    return {
-	      	msg: ''
+
 	    }
   	}
 }

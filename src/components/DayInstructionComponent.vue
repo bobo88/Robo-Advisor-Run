@@ -1,26 +1,12 @@
 <!--
-内容：查看指令 组件
+内容：当日指令 组件
 作者：BOBO
-日期： 20170803
+日期： 20170809
 -->
 <template>
-  <div class="query-orders-component mb30">
+  <div class="day-instruction-component mb30">
     <header class="table-common-head clearfix">
-        <span class="tit fl">查看指令 <br/> Query Orders</span>
-        <div class="query-orders-component-summary fr">
-            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
-            <span class="mr10">至(To)</span>
-            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
-
-            <Select v-model="chooseContract" style="width:140px" class="mr10">
-                <Option v-for="item in chooseContractList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-            <Select v-model="operatingStatus" style="width:140px" class="mr10">
-                <Option v-for="item in operatingStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
-
-            <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
-        </div>
+        <span class="tit fl">当日指令 <br/> Day Instruction</span>
     </header>
 
     <table cellpadding="0" cellspacing="0" class="table-common-main-lang">
@@ -43,6 +29,7 @@
           <td>{{ item.OrderAmount }}</td>
           <td>{{ item.Deadline }}</td>
           <td :class="{'f-blue': item.Remark.succ }">{{ item.Remark.text }}</td>
+          <td>{{ item.oprate }}</td>
         </tr>
       </tbody>
     </table>
@@ -59,40 +46,9 @@ export default {
     currencyFormatter,
     plusOrReduce
   },
-  name: 'query-orders-component',
+  name: 'day-instruction-component',
   data () {
     return {
-        chooseContract: '',
-        chooseContractList: [
-            {
-                value: '选择合约1',
-                label: '选择合约1'
-            },
-            {
-                value: '选择合约2',
-                label: '选择合约2'
-            },
-            {
-                value: '选择合约3',
-                label: '选择合约3'
-            }
-        ],
-        operatingStatus: '',
-        operatingStatusList: [
-            {
-                value: '运行状态1',
-                label: '运行状态1'
-            },
-            {
-                value: '运行状态2',
-                label: '运行状态2'
-            },
-            {
-                value: '运行状态3',
-                label: '运行状态3'
-            }
-        ],
-
         tableData: {
             tHead: [
               {
@@ -130,6 +86,10 @@ export default {
               {
                   title: '来源备注',
                   lang: 'Remark'
+              },
+              {
+                  title: '操作',
+                  lang: 'Operating'
               }
             ],
             tDataList:[
@@ -148,7 +108,8 @@ export default {
                     Remark: {
                         "text": '已下发(Running)',
                         "succ": false
-                    }
+                    },
+                    oprate: '终止'
                 },
                 {
                     OrderNumber: '1058521455dk155',
@@ -165,7 +126,8 @@ export default {
                     Remark: {
                         "text": '已触发，委托(Triggered)',
                         "succ": true
-                    }
+                    },
+                    oprate: '撤单'
                 },
                 {
                     OrderNumber: '1058521455dk155',
@@ -182,7 +144,8 @@ export default {
                     Remark: {
                         "text": '交易成功(Trade)',
                         "succ": true
-                    }
+                    },
+                    oprate: '终止'
                 },
                 {
                     OrderNumber: '1058521455dk155',
@@ -199,7 +162,8 @@ export default {
                     Remark: {
                         "text": '已下发(Running)',
                         "succ": false
-                    }
+                    },
+                    oprate: '撤单'
                 }
                 
             ]
@@ -212,6 +176,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-    .query-orders-component-summary{ padding: 14px 15px; height: 60px;}
+    .day-instruction-component-summary{ padding: 14px 15px; height: 60px;}
     .f-blue{ color: #24B1F7;}
 </style>

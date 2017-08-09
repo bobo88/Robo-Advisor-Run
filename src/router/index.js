@@ -1,11 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-//下达指令
-import IssueOrder from '@/components/issueOrder/IssueOrder';
-
-//查看指令
-import QueryOrders from '@/components/queryOrders/QueryOrders';
+//交易指令查询
+import TransactionOrderInquiry from '@/components/transactionOrderInquiry/TransactionOrderInquiry';
+    //当日指令
+    import DayInstruction from '@/components/transactionOrderInquiry/DayInstruction';
+    //历史指令
+    import HistoricalInstruction from '@/components/transactionOrderInquiry/HistoricalInstruction';
+    //执行情况查询
+    import ImplementationQuery from '@/components/transactionOrderInquiry/ImplementationQuery';
 
 //账户查询
 import QueryAccount from '@/components/queryAccount/QueryAccount';
@@ -18,16 +21,25 @@ import QueryAccount from '@/components/queryAccount/QueryAccount';
 	//历史持仓
 	import HistoricalPositionQuery from '@/components/queryAccount/HistoricalPositionQuery';
 	//收益走势
-	import CurveOfRefum from '@/components/queryAccount/CurveOfRefum';
+    import CurveOfRefum from '@/components/queryAccount/CurveOfRefum';
+    //逐日费用查询
+	import DailyCostInquiries from '@/components/queryAccount/DailyCostInquiries';
 
 //模拟账户
 import SimulatedAccount from '@/components/simulatedAccount/SimulatedAccount';
-	import AccountInformation from '@/components/simulatedAccount/AccountInformation';
+    //账户概要
+	import SimulationAccountInformation from '@/components/simulatedAccount/SimulationAccountInformation';
+    //成交查询
+    import SimulationTransactionQuery from '@/components/simulatedAccount/SimulationTransactionQuery';
+    //委托查询
+    import SimulationEntrustQuery from '@/components/simulatedAccount/SimulationEntrustQuery';
+    //历史持仓
+    import SimulationHistoricalPositionQuery from '@/components/simulatedAccount/SimulationHistoricalPositionQuery';
+    //收益走势
+    import SimulationCurveOfRefum from '@/components/simulatedAccount/SimulationCurveOfRefum';
 
-//行情数据
-import DataOfQuotation from '@/components/dataOfQuotation/DataOfQuotation';
-	import TodaysData from '@/components/dataOfQuotation/TodaysData';
-	import HistoricalData from '@/components/dataOfQuotation/HistoricalData';
+//账户设置
+import AccountSettings from '@/components/accountSettings/AccountSettings';
 
 Vue.use(Router)
 
@@ -39,16 +51,30 @@ export default new Router({
       redirect: 'issue-order'
     },
 
-    //下达指令
+    //交易指令查询
     {
-    	path: '/issue-order',
-    	component: IssueOrder
-    },
+    	path: '/transaction-order-inquiry',
+    	component: TransactionOrderInquiry,
+        redirect: '/transaction-order-inquiry/day-instruction',
+        children: [
+            //当日指令
+            {
+                path: 'day-instruction',
+                component: DayInstruction
+            },
 
-    //查看指令
-    {
-    	path: '/query-orders',
-    	component: QueryOrders
+            //历史指令
+            {
+                path: 'historical-instruction',
+                component: HistoricalInstruction
+            },
+
+            //执行情况查询
+            {
+                path: 'implementation-query',
+                component: ImplementationQuery
+            }
+        ]
     },
 
     //账户查询
@@ -84,7 +110,12 @@ export default new Router({
     		{
     			path: 'curve-of-refum',
     			component: CurveOfRefum
-    		}
+    		},
+            // 逐日费用查询
+            {
+                path: 'daily-cost-inquiries',
+                component: DailyCostInquiries
+            }
     	]	
     },
 
@@ -92,33 +123,42 @@ export default new Router({
     {
     	path: '/simulated-account',
     	component: SimulatedAccount,
-    	redirect: '/simulated-account/account-information',
+    	redirect: '/simulated-account/simulation-account-information',
     	children: [
     		//账户概要
     		{
-    			path: 'account-information',
-    			component: AccountInformation
-    		}
+    			path: 'simulation-account-information',
+    			component: SimulationAccountInformation
+    		},
+            //成交查询
+            {
+                path: 'simulation-transaction-query',
+                component: SimulationTransactionQuery
+            },
+
+            //委托查询
+            {
+                path: 'simulation-entrust-query',
+                component: SimulationEntrustQuery
+            },
+
+            // 历史持仓
+            {
+                path: 'simulation-historical-position-query',
+                component: SimulationHistoricalPositionQuery
+            },
+            // 收益走势
+            {
+                path: 'simulation-curve-of-refum',
+                component: SimulationCurveOfRefum
+            }
     	]
     },
 
-    //行情数据
+    //账户设置
     {
-    	path: '/data-of-quotation',
-    	component: DataOfQuotation,
-    	redirect: '/data-of-quotation/todays-data',
-    	children: [
-    		//当日数据
-    		{
-    			path: 'todays-data',
-    			component: TodaysData
-    		},
-    		//历史数据
-    		{
-    			path: 'historical-data',
-    			component: HistoricalData
-    		}
-    	]
+    	path: '/account-settings',
+    	component: AccountSettings
     }
   ]
 })

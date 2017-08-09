@@ -76,10 +76,10 @@ strong{ font-weight: normal;}
 }
 /* 双语表格 */
 .table-common-main-lang{ width: 100%; text-align: center; border: none; border-radius: 0 0 3px 3px; overflow: hidden;
-  th{ padding: 5px 0; height: 50px; line-height: 20px; background: #1D2742; text-align: center; font-size: 12px;
+  th{ padding: 5px; height: 50px; line-height: 20px; background: #1D2742; text-align: center; font-size: 12px;
     strong{ display: block; font-size: 14px;}
   }
-  td{ height: 50px; font-size: 14px; background: #252F48;}
+  td{ padding: 0 10px; height: 50px; font-size: 14px; background: #252F48;}
   tr:nth-child(2n){
     td{ background: #1D2742;}
   }

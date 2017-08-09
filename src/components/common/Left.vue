@@ -8,7 +8,7 @@
     <h1 class="logo"><img src="../../assets/logo.png"></h1>
 
     <ul class="nav-list">
-      <!-- <li>下达指令</li> -->
+      <!-- <li>交易指令查询</li> -->
 
       <!-- 将"激活时的CSS类名"应用在外层元素 li  -->
       <router-link tag="li" v-for="(data, index) in linkData" :to="data.url" :key="index">
@@ -32,16 +32,15 @@ export default {
     return {
       linkData: [
         {
-          "sort": "下达指令", 
-          "en": "Issue Order",
-          "url": "/issue-order",
-          "icon": "icon-zhiling"
-        },
-        {
-          "sort": "查看指令",
-          "en": "Query Orders",
-          "url": "/query-orders",
-          "icon": "icon-chakan"
+          "sort": "交易指令查询", 
+          "en": "Transaction Order Inquiry",
+          "url": "/transaction-order-inquiry",
+          "icon": "icon-zhiling",
+          "sortChild": [
+            {"tit": "当日指令", "url": "/transaction-order-inquiry/day-instruction", "en": "Day Instruction"},
+            {"tit": "历史指令", "url": "/transaction-order-inquiry/historical-instruction", "en": "Historical Instruction"},
+            {"tit": "执行情况查询", "url": "/transaction-order-inquiry/implementation-query", "en": "Implementation Query"}
+          ]
         },
         {
           "sort": "账户查询",
@@ -53,7 +52,8 @@ export default {
             {"tit": "成交查询", "url": "/query-account/transaction-query", "en": "Transaction Query"},
             {"tit": "委托查询", "url": "/query-account/entrust-query", "en": "Entrust Query"},
             {"tit": "历史持仓", "url": "/query-account/historical-position-query", "en": "Historical Position Query"},
-            {"tit": "收益走势", "url": "/query-account/curve-of-refum", "en": "Curve Of Refum"}
+            {"tit": "收益走势", "url": "/query-account/curve-of-refum", "en": "Curve Of Refum"},
+            {"tit": "逐日费用查询", "url": "/query-account/daily-cost-inquiries", "en": "Daily Cost Inquiries"}
           ]
         },
         {
@@ -62,18 +62,18 @@ export default {
           "url": "/simulated-account",
           "icon": "icon-monizhanghu",
           "sortChild": [
-            {"tit": "账户概要", "url": "/simulated-account/account-information", "en": "Account Information"}
+            {"tit": "账户概要", "url": "/simulated-account/simulation-account-information", "en": "Account Information"},
+            {"tit": "成交查询", "url": "/simulated-account/simulation-transaction-query", "en": "Transaction Query"},
+            {"tit": "委托查询", "url": "/simulated-account/simulation-entrust-query", "en": "Entrust Query"},
+            {"tit": "历史持仓", "url": "/simulated-account/simulation-historical-position-query", "en": "Historical Position Query"},
+            {"tit": "收益走势", "url": "/simulated-account/simulation-curve-of-refum", "en": "Curve Of Refum"}
           ]
         },
         {
-          "sort": "行情数据",
-          "en": "Data of Quotation",
-          "url": "/data-of-quotation",
-          "icon": "icon-tiyanmonizhanghu",
-          "sortChild": [
-            {"tit": "当日数据", "url": "/data-of-quotation/todays-data", "en": "Today's Data"},
-            {"tit": "历史数据", "url": "/data-of-quotation/historical-data", "en": "Historical Data"}
-          ]
+          "sort": "账户设置",
+          "en": "Account Settings",
+          "url": "/account-settings",
+          "icon": "icon-chakan"
         }
       ]
     }
