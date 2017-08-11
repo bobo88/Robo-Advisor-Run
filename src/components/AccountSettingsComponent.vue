@@ -12,26 +12,18 @@
     <table cellpadding="0" cellspacing="0" class="table-item table-common-main-lang">
       <thead>
         <tr>
-          <th class="left-tit">1.选择设置方式</th> 
+          <th class="left-tit">1.自动交易资金设置</th> 
           <th>
-            <Button type="primary" shape="circle" class="buy-btn mr10">按金额</Button>
-            <Button type="primary" shape="circle" class="buy-btn mr10">按资金比例</Button>
-          </th> 
-        </tr>
-      </thead>
-      <tbody>
-
-        <tr>
-          <td class="left-tit">2.自动交易资金设置</td>
-          <td>
             <span class="mr10">
               使用总资金不超过 <Input v-model="TotalFunds" placeholder="请输入金额" style="width: 86px"></Input> 元;
             </span>
             <span class="mr10">
               单次交易资金不超过 <Input v-model="SingleFunding" placeholder="请输入金额" style="width: 86px"></Input> 元
             </span>
-          </td>
+          </th> 
         </tr>
+      </thead>
+      <tbody>      
         <tr>
           <td class="left-tit">&nbsp;</td>
           <td>
@@ -71,6 +63,7 @@ export default {
   .table-item{ color: #fff; font-size: 14px; font-weight: normal; text-align: left;
     th{ font-size: 14px; text-align: left; font-weight: normal;}
     .left-tit{ padding-left: 20px; width: 160px;}
+    .oprate-btn{ width: 120px;}
     .ok-btn{ width: 200px;}
   }
 </style>
