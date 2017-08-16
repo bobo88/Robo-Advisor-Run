@@ -74,6 +74,12 @@ export default {
           "en": "Account Settings",
           "url": "/account-settings",
           "icon": "icon-chakan"
+        },
+	{
+          "sort": "行情交易",
+          "en": "Quotation and trade",
+          "url": "/Quotation-and-trade",
+          "icon": "icon-tiyanmonizhanghu"
         }
       ]
     }

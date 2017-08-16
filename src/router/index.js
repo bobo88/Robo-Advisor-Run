@@ -28,7 +28,7 @@ import QueryAccount from '@/components/queryAccount/QueryAccount';
 //模拟账户
 import SimulatedAccount from '@/components/simulatedAccount/SimulatedAccount';
     //账户概要
-	import SimulationAccountInformation from '@/components/simulatedAccount/SimulationAccountInformation';
+    import SimulationAccountInformation from '@/components/simulatedAccount/SimulationAccountInformation';
     //成交查询
     import SimulationTransactionQuery from '@/components/simulatedAccount/SimulationTransactionQuery';
     //委托查询
@@ -41,6 +41,15 @@ import SimulatedAccount from '@/components/simulatedAccount/SimulatedAccount';
 //账户设置
 import AccountSettings from '@/components/accountSettings/AccountSettings';
 
+// 行情交易 
+import QuotationandTrade from '@/components/quotationandTrade/QuotationandTrade'
+    import tradePosition from '@/components/tradePosition'
+    import tradeEntrust from '@/components/tradeentrust'
+    import transactionqueryinquo from '@/components/transactionqueryinquo'
+    import transferAccounts from '@/components/transferAccounts'
+        import accounts from '@/components/accounts'
+        import Record from '@/components/Record'
+
 Vue.use(Router)
 
 export default new Router({
@@ -48,7 +57,7 @@ export default new Router({
   	//首页
     {
       path: '/',
-      redirect: 'issue-order'
+      redirect: 'transaction-order-inquiry'
     },
 
     //交易指令查询
@@ -159,6 +168,49 @@ export default new Router({
     {
     	path: '/account-settings',
     	component: AccountSettings
+    },
+    
+    // 行情交易
+    {
+        path: '/Quotation-and-trade',
+        component: QuotationandTrade,
+        redirect: '/Quotation-and-trade/trade-position',
+        children: [
+            // 持仓
+            {
+                path: 'trade-position',
+                component: tradePosition
+            },
+            // 成交
+            {
+                path: 'transaction-query-inquo',
+                component: transactionqueryinquo
+            },
+            // 委托
+            {
+                path: 'trade-entrust',
+                component: tradeEntrust
+            },
+            // 转账
+            {
+                path: 'transfer-accounts',
+                component: transferAccounts,
+                // redirect: '/Quotation-and-trade/transfer-accounts/accounts-Record',
+                children: [
+                    // 轉賬
+                    {
+                        path: 'accounts',
+                        component: accounts
+                    },
+                    // 转账记录
+                    {
+                        path: 'accounts-Record',
+                        component: Record
+                    }
+                ]
+            }
+
+        ]
     }
   ]
 })
