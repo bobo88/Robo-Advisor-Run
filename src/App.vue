@@ -1,53 +1,23 @@
 <template>
   <div id="app">
-    <left></left>
-    <top></top>
-    
-    <div class="main">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Left from '@/components/common/Left'
-import Top from '@/components/common/Top'
-import '@/fonts/iconfont.css'    // 使用 iconfont图标库
-import io from 'socket.io-client'
+
 export default {
-  components: {
-    Left,
-    Top
-  },
-  name: 'app',
-  beforeCreate () {
-        // console.log('aa')
-        var that = this
-        var socket = io.connect(process.env.SOCKET_URL)
-          console.log(that.$store.state.marketstate.Au)
-            socket.on('marketAu', function (data) {
-                // console.log(that.$store.state.quoatation.Au)
-                that.$store.state.quoatation.Au = data
-                // that.quotationloaded.Au = true
-                if (!that.$store.state.marketstate.Au) {
-                  that.$store.state.marketstate.Au = true
-                }
-            })
-            socket.on('marketAg', function (data) {
-                that.$store.state.quoatation.Ag = data
-                // that.quotationloaded.Ag = true
-                if (!that.$store.state.marketstate.Ag) {
-                  that.$store.state.marketstate.Ag = true
-                }
-            })
-            socket.on('marketmAu', function (data) {
-                that.$store.state.quoatation.mAu = data
-                // that.quotationloaded.mAu = true
-                 if (!that.$store.state.marketstate.mAu) {
-                  that.$store.state.marketstate.mAu = true
-                }
-            })
+  data(){
+    return {
+      isLogin: false,
+      userInfo: { //保存用户信息
+        nick: null,
+        ulevel: null,
+        uid: null,
+        portrait: null
+      }
     }
+  }
 }
 </script>
 
@@ -136,6 +106,7 @@ strong{ font-weight: normal;}
   .ivu-btn-ghost{ color: #90A4D9; border: 1px solid #90a4d9;}
   .ivu-date-picker{ color: #333;}
   .ivu-tooltip-inner{ max-width: 400px;}
+  .ivu-page{ padding: 10px 0; text-align: right;}
 }
 .main{ padding: 110px 50px 20px 310px; min-width: 100%; min-height: 100%;}
 

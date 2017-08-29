@@ -4,7 +4,7 @@
 日期： 20170803
 -->
 <template>
-  <div class="historical-position-query-component">
+  <div class="user-historical-position-query-component">
   	<header class="table-common-head clearfix">
   		<span class="tit fl">历史持仓<br/> Historical Position Query</span>
 	    <div class="hpqc-summary fr">
@@ -23,42 +23,32 @@
         <Button type="info" shape="circle" style="width: 70px" class="mr10" @click="searchData">查询</Button>
       </div>
   	</header>
-
-    <div class="historicalPositionQueryData-wrap" v-if="historicalPositionQueryData && historicalPositionQueryData.length > 0">
-      <template v-for="item in historicalPositionQueryData">
-        <h5 class="date-tit">{{ item.date }}日持仓情况</h5>
+    
+    <div class="historicalPositionQueryData-wrap">
+      <template v-for="(obj, key) in simulatedData">
+        <h5 class="date-tit">{{ key }}日持仓情况</h5>
 
         <table cellpadding="0" cellspacing="0" class="table-common-main-lang">
           <thead>
             <tr>
-              <th v-for="i in item.tHead">
-                <strong>{{ i.title }}</strong>
-                {{ i.lang }}
-              </th>
+              <th v-for="item in historicalPositionQueryHead">
+                <strong>{{ item.title }}</strong>
+                {{ item.lang }}
+              </th>  
             </tr>
           </thead>
           <tbody>
-            <tr v-for="i in item.tDataList">
-              <td>{{ i.spotName }}</td>
-              <td>{{ i.positionType }}</td>
-              <td>{{ i.positionAmount }}</td>
-              <td>{{ i.averageCost | currencyFormatter }}</td>
-              <td>{{ i.closePrice | currencyFormatter }}</td>
-              <td><plus-or-reduce :obj="i.floatingReturn"></plus-or-reduce></td>
-              <td>{{ i.positionMargin | currencyFormatter }}</td>
-              <td>{{ i.positionRatio / 100 }}%</td>
+            <tr v-for="item in obj">
+              <td>{{ item.spotName }}</td>
+              <td>{{ item.positionType }}</td>
+              <td>{{ item.positionAmount }}</td>
+              <td>{{ item.averageCost | currencyFormatter }}</td>
+              <td>{{ item.closePrice | currencyFormatter }}</td>
+              <td><plus-or-reduce-state :obj="item.floatingReturn"></plus-or-reduce-state></td>
+              <td>{{ item.positionMargin | currencyFormatter }}</td>
+              <td>{{ item.positionRatio }}%</td>
             </tr>
           </tbody>
-        </table>
-      </template>
-    </div>
-
-    <div v-else>
-      <template>
-        <table cellpadding="0" cellspacing="0" class="table-common-main-lang">
-          <tr>
-            <td colspan="8">暂无数据</td>
-          </tr>
         </table>
       </template>
     </div>
@@ -69,7 +59,7 @@
 <script>
 //引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
-import plusOrReduce from '@/components/common/plusOrReduce'
+import plusOrReduceState from '@/components/common/plusOrReduceState'
 
 function formatTime(s) {
     if(!s){
@@ -96,9 +86,9 @@ function formatTime(s) {
 export default {
   components: {
     currencyFormatter,
-    plusOrReduce
+    plusOrReduceState
   },
-  name: 'account-position-lang',
+  name: 'user-historical-position-query-component',
   props: ['headSummary'], // 父组件传headSummary属性过来，如果为false，则不显示账户持仓组件头部右边内容
   data () {
     return {
@@ -108,8 +98,10 @@ export default {
       start_date: '', //开始日期
       trading_token: 'xx', //交易token
 
-       historicalPositionQueryData: [],
-      tHead: [
+      //数据
+      simulatedData: [],
+
+      historicalPositionQueryHead: [
         {
             title: '合约',
             lang: 'Spot Name'
@@ -142,9 +134,7 @@ export default {
             title: '仓位',
             lang: 'Position Ratio'
         }
-      ],
-      start_date: '',
-      end_date: ''
+      ]
     }
   },
   computed: {
@@ -158,29 +148,33 @@ export default {
     }
   },
   methods: {
-    searchData () {
+    searchData(){
+
       var vm = this;
-      const url = 'marketSimulated/historyDeferPosition'
-      let params = {
+      var params = {
         end_date: this.endDateFarmatter, //结束日期
         h_query_num: this.h_query_num, //每页记录数
         h_start_num: this.h_start_num, //当前第几页
         start_date: this.startDateFarmatter, //开始日期
         trading_token: vm.$store.state.trading_token, //交易token
-      }
-      this.$axios(url, 'post', params).then(obj => {
-        console.log(obj.data.data.list)
-        if (obj.data.code === 100) {
-          let data = obj.data.data.list
-          for (let key in data) {
-            let obj = {}
-            obj.date = key
-            obj.tDataList = data[key]
-            obj.tHead = this.tHead
-            this.historicalPositionQueryData.push( obj )
+      };
+
+      if(!!this.end_date && !!this.h_query_num && !!this.h_start_num && !!this.start_date && !!this.trading_token){
+        this.$http({
+          method: 'post',
+          url: process.env.BASE_URL + '/marketAccount/historyDeferPosition',
+          params: params,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        })
+        .then(function (response) {
+          if(response.data.code === 100){
+            vm.simulatedData = response.data.data.list;
           }
-        }
-      })
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
     }
   }
 }
@@ -192,6 +186,6 @@ export default {
     .icon-tips{ font-size: 24px; vertical-align: middle;}
   }
   .historicalPositionQueryData-wrap{ height: 700px; overflow: auto;
-    .date-tit{ padding-left: 20px; height: 30px; line-height: 30px; background: #3B4B76;}
+    .date-tit{ margin: 5px 0 0; padding-left: 20px; height: 30px; line-height: 30px; background: #3B4B76;}
   }
 </style>

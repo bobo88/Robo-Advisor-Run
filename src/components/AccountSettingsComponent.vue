@@ -12,7 +12,7 @@
     <table cellpadding="0" cellspacing="0" class="table-item table-common-main-lang">
       <thead>
         <tr>
-          <th class="left-tit">1.自动交易资金设置</th> 
+          <th class="left-tit">1.自动交易资金设置</th>
           <th>
             <span class="mr10">
               使用总资金不超过 <Input v-model="TotalFunds" placeholder="请输入金额" style="width: 86px"></Input> 元;
@@ -20,14 +20,14 @@
             <span class="mr10">
               单次交易资金不超过 <Input v-model="SingleFunding" placeholder="请输入金额" style="width: 86px"></Input> 元
             </span>
-          </th> 
+          </th>
         </tr>
       </thead>
-      <tbody>      
+      <tbody>
         <tr>
           <td class="left-tit">&nbsp;</td>
           <td>
-            <Button type="primary" class="buy-btn mr10 ok-btn">确定</Button>
+            <Button type="primary" class="buy-btn mr10 ok-btn" @click="accountSettings">确定</Button>
           </td>
         </tr>
       </tbody>
@@ -51,6 +51,18 @@ export default {
     return {
       TotalFunds: '',
       SingleFunding: ''
+    }
+  },
+  methods: {
+    accountSettings () {
+      const url = 'marketAccount/accSetup'
+      let params = {
+        trading_token: this.$store.state.trading_token,
+        type: 1,
+        val1: this.TotalFunds,
+        val2: this.SingleFunding
+      }
+      this.$axios(url, 'post', params).then(obj => {console.log(obj)})
     }
   }
 }

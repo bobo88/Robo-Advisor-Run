@@ -7,12 +7,12 @@
   <div class="account-position-lang mb30">
   	<header class="table-common-head clearfix">
   		<span class="tit fl">账户持仓 <br/> Current Position</span>
-  		<p class="head-summary fr" v-if="headSummary">
-  			<span>账户总资产：5678010.75</span>
-  			<span>收益率：<em class="f-red">+23.45%</em></span>
-  			<span>累计盈亏：<em class="f-red">+6780.25</em></span>
-  			<span>仓位：46.34%</span>
-  		</p>
+  		<!-- <p class="head-summary fr" v-if="headSummary">
+        <span>账户总资产：5678010.75</span>
+        <span>收益率：<em class="f-red">+23.45%</em></span>
+        <span>累计盈亏：<em class="f-red">+6780.25</em></span>
+        <span>仓位：46.34%</span>
+      </p> -->
   	</header>
 
     <table cellpadding="0" cellspacing="0" class="table-common-main-lang">
@@ -21,7 +21,7 @@
           <th v-for="item in tableData.tHead">
             <strong>{{ item.title }}</strong>
             {{ item.lang }}
-          </th>  
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -32,8 +32,10 @@
           <td>{{ item.availableAmount | currencyFormatter }}</td>
           <td>{{ item.currentPrice | currencyFormatter }}</td>
           <td>{{ item.averageCost | currencyFormatter }}</td>
+           <!-- <td>{{ item.floatingReturn | currencyFormatter }}</td> -->
+           <!-- <td>{{ item.returnRatio }}</td> -->
           <td><plus-or-reduce :obj="item.floatingReturn"></plus-or-reduce></td>
-          <td><plus-or-reduce :obj="item.returnRatio" :percentage="true"></plus-or-reduce></td>
+          <!-- <td><plus-or-reduce :obj="item.returnRatio" :percentage="true"></plus-or-reduce></td> -->
         </tr>
       </tbody>
     </table>
@@ -44,6 +46,7 @@
 //引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
 import plusOrReduce from '@/components/common/plusOrReduce'
+
 
 export default {
   components: {
@@ -84,14 +87,14 @@ export default {
           {
               title: '浮动盈亏',
               lang: 'Floating Return'
-          },
-          {
-              title: '盈亏比例',
-              lang: 'Return Ratio'
           }
+          // {
+          //     title: '盈亏比例',
+          //     lang: 'Return Ratio'
+          // }
         ],
         tDataList:[
-            {
+            /* {
                 spotName: '黄金延期',
                 positionType: '多',
                 positionAmount: 30,
@@ -154,11 +157,21 @@ export default {
                     "status": 'reduce',
                     "num": 0.05
                 }
-            }
+            } */
         ]
       }
 
     }
+  },
+  beforeCreate () {
+    var url = 'marketSimulated/currentPosition'
+    var params = { trading_token: this.$store.state.trading_token}
+    this.$axios(url, 'post', params).then(obj => {
+      // console.log(obj)
+      if (obj.data.code === 100) {
+        this.tableData.tDataList = obj.data.data.list_defer_posi_info
+      }
+    })
   }
 }
 </script>

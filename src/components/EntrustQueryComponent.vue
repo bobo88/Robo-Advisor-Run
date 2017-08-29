@@ -8,10 +8,10 @@
   	<header class="table-common-head clearfix">
   		<span class="tit fl">委托查询 <br/> Entrust Query</span>
   		<div class="entrust-query-summary fr">
-  			<Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+  			<Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10" v-model="start_date"></Date-picker>
         <span class="mr10">至</span>
-        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
-        <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
+        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10" v-model="end_date"></Date-picker>
+        <Button type="info" shape="circle" style="width: 70px" class="mr10" @click="entrustQuery(1)">查询</Button>
   		</div>
   	</header>
 
@@ -21,22 +21,30 @@
           <th v-for="item in tableData.tHead">
             <strong>{{ item.title }}</strong>
             {{ item.lang }}
-          </th>  
+          </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="tableData.tDataList && tableData.tDataList.length > 0">
         <tr v-for="item in tableData.tDataList">
-          <td>{{ item.E_exchTime }}</td>
-          <td>{{ item.ProdCode }}</td>
-          <td>{{ item.OrderType }}</td>
-          <td>{{ item.OrderPrice | currencyFormatter }}</td>
-          <td>{{ item.OrderAmount }}</td>
-          <td>{{ item.MatchAmount }}</td>
-          <td>{{ item.EntrStat.default }}<br/>{{ item.EntrStat.lang }}</td>
-          <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.OrderNumber)">{{ item.OrderNumber }}</td>
-          <td>{{ item.Remark }}</td>
+          <td>{{ item.eExchTime }}</td>
+          <td>{{ item.prodCode }}</td>
+          <td>{{ item.orderType }}</td>
+          <td>{{ item.orderPrice | currencyFormatter }}</td>
+          <td>{{ item.orderAmount }}</td>
+          <td>{{ item.matchAmount }}</td>
+          <td>{{ item.entrStat }}</td>
+          <!-- <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.OrderNumber)">{{ item.OrderNumber }}</td> -->
+          <td>{{ item.order }}</td>
+          <td>--</td>
         </tr>
       </tbody>
+
+      <tbody v-else>
+        <tr>
+          <td colspan="9">暂无数据</td>
+        </tr>
+      </tbody>
+
     </table>
 
     <pop-up v-if="showPopUpState" @close-tc="closePopUp">
@@ -120,7 +128,7 @@ export default {
           }
         ],
         tDataList:[
-            {
+           /* {
                 E_exchTime: '2017-05-25 9:23:35',
                 ProdCode: '黄金延期Au(T+D)',
                 OrderType: '多开(Buy Long)',
@@ -259,7 +267,7 @@ export default {
                 },
                 OrderNumber: '170525dk0234',
                 Remark: 'auto_order'
-            }
+            } */
         ]
       },
 
@@ -285,7 +293,9 @@ export default {
           lang: 'Run Status',
           content: ''
         }
-      }
+      },
+      start_date: '',
+      end_date: ''
 
     }
   },
@@ -319,6 +329,23 @@ export default {
     },
     closePopUp(){
       this.showPopUpState = false;
+    },
+    entrustQuery (num) {
+      var url = 'marketAccount/historyEntrust'
+      var params = {
+        trading_token: this.$store.state.trading_token,
+        end_date: this.formatTime(this.end_date),
+        start_date: this.formatTime(this.start_date),
+        h_query_num: 5,
+        h_start_num: num
+      }
+      this.$axios(url, 'post', params).then(obj => {
+      // console.log(obj.data.data.list)
+        if (obj.data.code === 100) {
+        this.tableData.tDataList = obj.data.data.list
+        // console.log(this.tableData.tDataList.length)
+        }
+      })
     }
   }
 }

@@ -8,13 +8,13 @@
     <header class="table-common-head clearfix">
         <span class="tit fl">历史指令 <br/> Historical Instruction</span>
         <div class="historical-instruction-component-summary fr">
-            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10" v-model="start_date"></Date-picker>
             <span class="mr10">至(To)</span>
-            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10" v-model="end_date"></Date-picker>
 
-            <Input v-model="timeInput" placeholder="请输入指令编号" style="width: 140px"></Input>
+            <Input v-model="order" placeholder="请输入指令编号" style="width: 140px"></Input>
 
-            <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
+            <Button type="info" shape="circle" style="width: 70px" class="mr10" @click="getHistoricalInstruction(1)">查询</Button>
         </div>
     </header>
 
@@ -24,21 +24,33 @@
           <th v-for="item in tableData.tHead">
             <strong>{{ item.title }}</strong>
             {{ item.lang }}
-          </th>  
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in tableData.tDataList">
-          <td>{{ item.OrderNumber }}</td>
-          <td>{{ item.Time }}</td>
-          <td>{{ item.SpotName }}</td>
-          <td>{{ item.TradeSignal.default}}<br/> {{ item.TradeSignal.lang }}</td>
-          <td>{{ item.TradeType }}</td>
-          <td>{{ item.OrderPrice }}</td>
-          <td>{{ item.OrderAmount }}</td>
-          <td>{{ item.Deadline }}</td>
-          <td v-if="item.Remark.succ" class="f-blue" @click="showPopUp(item.OrderNumber)">{{ item.Remark.text }}</td>
-          <td v-else>{{ item.Remark.text }}</td>
+          <td>{{ item.orderNumber }}</td>
+          <td>{{ item.orderTime }}</td>
+          <td>{{ item.prodCode }}</td>
+          <td>{{ item.tradeSignalType === 5 ? '---' :
+                 item.tradeSignalType === 1 ? '最新价' :
+                 item.tradeSignalType === 2 ?  '成交量' :
+                 item.tradeSignalType === 3 ? '成交额' : '均价'
+              }}
+              {{ item.tradeSignalCond === 1 ? '>=' : '<='}}
+              {{ item.entrPrice }}
+          </td>
+          <!-- <td>{{ item.TradeSignal}}<br/> {{ item.TradeSignal }}</td> -->
+          <td>{{ (item.bs === 'b' && item.offsetFlag === 0) ? '多开' :
+                 (item.bs === 's' && item.offsetFlag === 0) ? '空开' :
+                 (item.bs === 'b' && item.offsetFlag === 1) ? '平多' : '平空' }}
+          </td>
+          <td>{{ item.entrPrice }}</td>
+          <td>{{ item.entrAmount }}</td>
+          <td>{{ item.orderDeadline }}</td>
+         <!--  <td v-if="item.Remark.succ" class="f-blue" @click="showPopUp(item.OrderNumber)">{{ item.Remark.text }}</td> -->
+          <!-- <td v-else>{{ item.Remark.text }}</td> -->
+          <td>---</td>
         </tr>
       </tbody>
     </table>
@@ -59,7 +71,7 @@
         </table>
       </div>
     </pop-up>
-    
+
   </div>
 </template>
 
@@ -79,7 +91,9 @@ export default {
   name: 'historical-instruction-component',
   data () {
     return {
-        timeInput: '',
+        order: '',
+        start_date: '',
+        end_date: '',
         tableData: {
             tHead: [
               {
@@ -120,7 +134,7 @@ export default {
               }
             ],
             tDataList:[
-                {
+             /*   {
                     OrderNumber: '1058521455dk155',
                     Time: '10:33:18',
                     SpotName: '黄金延期Au(T+D)',
@@ -188,7 +202,7 @@ export default {
                         "succ": false
                     }
                 }
-                
+                */
             ]
         },
 
@@ -228,6 +242,9 @@ export default {
 
     }
   },
+  /* created () {
+    this.getHistoricalInstruction(1)
+  }, */
   methods: {
     showPopUp(order){
       this.showPopUpState = true;
@@ -268,6 +285,24 @@ export default {
     },
     closePopUp(){
       this.showPopUpState = false;
+    },
+    getHistoricalInstruction (num) {
+      const url = 'marketOrder/historyOrder'
+      let params = {
+        startTime: this.formatTime1(this.start_date),
+        endTime: this.formatTime1(this.end_date),
+        page_num: num,
+        page_size: 5,
+        order: this.order,
+        trading_token: this.$store.state.trading_token
+      }
+      this.$axios(url, 'post', params).then(obj => {
+        console.log(obj.data.data.list)
+        if (obj.data.code === 100) {
+          this.tableData.tDataList = obj.data.data.list
+          console.log( this.tableData.tDataList)
+        }
+      })
     }
   }
 }

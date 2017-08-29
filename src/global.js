@@ -1,0 +1,1 @@
+export const trading_token = window.trading_token = sessionStorage.getItem('trading_token')

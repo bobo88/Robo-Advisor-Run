@@ -39,7 +39,7 @@ export default {
           "sortChild": [
             {"tit": "当日指令", "url": "/transaction-order-inquiry/day-instruction", "en": "Day Instruction"},
             {"tit": "历史指令", "url": "/transaction-order-inquiry/historical-instruction", "en": "Historical Instruction"},
-            {"tit": "执行情况查询", "url": "/transaction-order-inquiry/implementation-query", "en": "Implementation Query"}
+            // {"tit": "执行情况查询", "url": "/transaction-order-inquiry/implementation-query", "en": "Implementation Query"}
           ]
         },
         {

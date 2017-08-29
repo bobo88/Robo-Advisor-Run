@@ -4,23 +4,30 @@
 日期： 20170802
 -->
 <template>
-  <div class="plus-or-reduce">
-    <span v-if="obj > 0" class="f-red">
+  <div class="plus-or-reduce-state">
+    <span v-if=" obj > 0" class="f-red">
       <em>+</em>
       <em>{{ obj | currencyFormatter }} <i v-if="percentage">%</i></em>
     </span>
-    <span v-else class="f-green">
-      <!-- <em>-</em> -->
+    <span v-else-if="obj < 0" class="f-green">
+      <em>{{ obj | currencyFormatter }} <i v-if="percentage">%</i></em>
+    </span>
+    <span v-else>
       <em>{{ obj | currencyFormatter }} <i v-if="percentage">%</i></em>
     </span>
   </div>
 </template>
 
 <script>
+//引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
+
 export default {
+  components: {
+    currencyFormatter
+  },
   props: ['obj','percentage'],
-  name: 'plus-or-reduce',
+  name: 'plus-or-reduce-state',
   data () {
     return {
       msg: ''
@@ -31,5 +38,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-  .plus-or-reduce{ display: inline-block;}
+  .plus-or-reduce-state{ display: inline-block;}
 </style>

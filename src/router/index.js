@@ -1,6 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+//登录页面
+import Login from '@/components/login/Login';
+
+//主页面
+import Main from '@/components/Main';
+
 //交易指令查询
 import TransactionOrderInquiry from '@/components/transactionOrderInquiry/TransactionOrderInquiry';
     //当日指令
@@ -8,7 +14,7 @@ import TransactionOrderInquiry from '@/components/transactionOrderInquiry/Transa
     //历史指令
     import HistoricalInstruction from '@/components/transactionOrderInquiry/HistoricalInstruction';
     //执行情况查询
-    import ImplementationQuery from '@/components/transactionOrderInquiry/ImplementationQuery';
+    // import ImplementationQuery from '@/components/transactionOrderInquiry/ImplementationQuery';
 
 //账户查询
 import QueryAccount from '@/components/queryAccount/QueryAccount';
@@ -41,7 +47,7 @@ import SimulatedAccount from '@/components/simulatedAccount/SimulatedAccount';
 //账户设置
 import AccountSettings from '@/components/accountSettings/AccountSettings';
 
-// 行情交易 
+// 行情交易
 import QuotationandTrade from '@/components/quotationandTrade/QuotationandTrade'
     import tradePosition from '@/components/tradePosition'
     import tradeEntrust from '@/components/tradeentrust'
@@ -54,163 +60,191 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-  	//首页
+      {
+        path: '/',
+        component: Login,
+        redirect: '/login'
+      },
+    //首页
     {
-      path: '/',
-      redirect: 'transaction-order-inquiry'
+      path: '/login',
+      component: Login
     },
 
-    //交易指令查询
     {
-    	path: '/transaction-order-inquiry',
-    	component: TransactionOrderInquiry,
-        redirect: '/transaction-order-inquiry/day-instruction',
+        path: '/main',
+        component: Main,
+        redirect: '/transaction-order-inquiry',
         children: [
-            //当日指令
+            //交易指令查询
             {
-                path: 'day-instruction',
-                component: DayInstruction
-            },
-
-            //历史指令
-            {
-                path: 'historical-instruction',
-                component: HistoricalInstruction
-            },
-
-            //执行情况查询
-            {
-                path: 'implementation-query',
-                component: ImplementationQuery
-            }
-        ]
-    },
-
-    //账户查询
-    {
-    	path: '/query-account',
-    	component: QueryAccount, // 注意： 当父路由把第一个子路由当做默认路由时，父路由的component不能省略，同时父路由组件里面必须包含 <router-view></router-view>
-    	redirect: '/query-account/asset-query',
-    	children: [
-    		//资产查询
-    		{
-    			path: 'asset-query',
-    			component: AssetQuery
-    		},
-
-    		//成交查询
-    		{
-    			path: 'transaction-query',
-    			component: TransactionQuery
-    		},
-
-    		//委托查询
-    		{
-    			path: 'entrust-query',
-    			component: EntrustQuery
-    		},
-
-    		// 历史持仓
-    		{
-    			path: 'historical-position-query',
-    			component: HistoricalPositionQuery
-    		},
-    		// 收益走势
-    		{
-    			path: 'curve-of-refum',
-    			component: CurveOfRefum
-    		},
-            // 逐日费用查询
-            {
-                path: 'daily-cost-inquiries',
-                component: DailyCostInquiries
-            }
-    	]	
-    },
-
-    //模拟账户
-    {
-    	path: '/simulated-account',
-    	component: SimulatedAccount,
-    	redirect: '/simulated-account/simulation-account-information',
-    	children: [
-    		//账户概要
-    		{
-    			path: 'simulation-account-information',
-    			component: SimulationAccountInformation
-    		},
-            //成交查询
-            {
-                path: 'simulation-transaction-query',
-                component: SimulationTransactionQuery
-            },
-
-            //委托查询
-            {
-                path: 'simulation-entrust-query',
-                component: SimulationEntrustQuery
-            },
-
-            // 历史持仓
-            {
-                path: 'simulation-historical-position-query',
-                component: SimulationHistoricalPositionQuery
-            },
-            // 收益走势
-            {
-                path: 'simulation-curve-of-refum',
-                component: SimulationCurveOfRefum
-            }
-    	]
-    },
-
-    //账户设置
-    {
-    	path: '/account-settings',
-    	component: AccountSettings
-    },
-    
-    // 行情交易
-    {
-        path: '/Quotation-and-trade',
-        component: QuotationandTrade,
-        redirect: '/Quotation-and-trade/trade-position',
-        children: [
-            // 持仓
-            {
-                path: 'trade-position',
-                component: tradePosition
-            },
-            // 成交
-            {
-                path: 'transaction-query-inquo',
-                component: transactionqueryinquo
-            },
-            // 委托
-            {
-                path: 'trade-entrust',
-                component: tradeEntrust
-            },
-            // 转账
-            {
-                path: 'transfer-accounts',
-                component: transferAccounts,
-                // redirect: '/Quotation-and-trade/transfer-accounts/accounts-Record',
+            	path: '/transaction-order-inquiry',
+            	component: TransactionOrderInquiry,
+                redirect: '/transaction-order-inquiry/day-instruction',
                 children: [
-                    // 轉賬
+                    //当日指令
                     {
-                        path: 'accounts',
-                        component: accounts
+                        path: 'day-instruction',
+                        component: DayInstruction
                     },
-                    // 转账记录
+
+                    //历史指令
                     {
-                        path: 'accounts-Record',
-                        component: Record
+                        path: 'historical-instruction',
+                        component: HistoricalInstruction
+                    },
+                    
+                    // //执行情况查询
+                    // {
+                    //     path: 'implementation-query',
+                    //     component: ImplementationQuery
+                    // }
+                ]
+            },
+
+            //账户查询
+            {
+            	path: '/query-account',
+            	component: QueryAccount, // 注意： 当父路由把第一个子路由当做默认路由时，父路由的component不能省略，同时父路由组件里面必须包含 <router-view></router-view>
+            	redirect: '/query-account/asset-query',
+            	children: [
+            		//资产查询
+            		{
+            			path: 'asset-query',
+            			component: AssetQuery
+            		},
+
+            		//成交查询
+            		{
+            			path: 'transaction-query',
+            			component: TransactionQuery
+            		},
+
+            		//委托查询
+            		{
+            			path: 'entrust-query',
+            			component: EntrustQuery
+            		},
+
+            		// 历史持仓
+            		{
+            			path: 'historical-position-query',
+            			component: HistoricalPositionQuery
+            		},
+            		// 收益走势
+            		{
+            			path: 'curve-of-refum',
+            			component: CurveOfRefum
+            		},
+                    // 逐日费用查询
+                    {
+                        path: 'daily-cost-inquiries',
+                        component: DailyCostInquiries
                     }
+            	]
+            },
+
+            //模拟账户
+            {
+            	path: '/simulated-account',
+            	component: SimulatedAccount,
+            	redirect: '/simulated-account/simulation-account-information',
+            	children: [
+            		//账户概要
+            		{
+            			path: 'simulation-account-information',
+            			component: SimulationAccountInformation
+            		},
+                    //成交查询
+                    {
+                        path: 'simulation-transaction-query',
+                        component: SimulationTransactionQuery
+                    },
+
+                    //委托查询
+                    {
+                        path: 'simulation-entrust-query',
+                        component: SimulationEntrustQuery
+                    },
+
+                    // 历史持仓
+                    {
+                        path: 'simulation-historical-position-query',
+                        component: SimulationHistoricalPositionQuery
+                    },
+                    // 收益走势
+                    {
+                        path: 'simulation-curve-of-refum',
+                        component: SimulationCurveOfRefum
+                    }
+            	]
+            },
+
+            //账户设置
+            {
+            	path: '/account-settings',
+            	component: AccountSettings
+            },
+
+            // 行情交易
+            {
+                path: '/Quotation-and-trade',
+                component: QuotationandTrade,
+                redirect: '/Quotation-and-trade/trade-position',
+                children: [
+                    // 持仓
+                    {
+                        path: 'trade-position',
+                        component: tradePosition
+                    },
+                    // 成交
+                    {
+                        path: 'transaction-query-inquo',
+                        component: transactionqueryinquo
+                    },
+                    // 委托
+                    {
+                        path: 'trade-entrust',
+                        component: tradeEntrust
+                    },
+                    // 转账
+                    {
+                        path: 'transfer-accounts',
+                        component: transferAccounts,
+                        // redirect: '/Quotation-and-trade/transfer-accounts/accounts-Record',
+                        children: [
+                            // 轉賬
+                            {
+                                path: 'accounts',
+                                component: accounts
+                            },
+                            // 转账记录
+                            {
+                                path: 'accounts-Record',
+                                component: Record
+                            }
+                        ]
+                    }
+
                 ]
             }
 
         ]
     }
+
+    // //首页
+   //  {
+   //    path: '/',
+   //    redirect: 'transaction-order-inquiry'
+   //  },
+   //  // 登录
+   //  {
+   //      path: '/login',
+   //      component: resolve => require(['@/components/admin/login'], resolve)
+   //  },
+  
+
+
+  
   ]
 })
